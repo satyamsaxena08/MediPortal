@@ -4,10 +4,7 @@ import com.mediportal.payloads.PatientDto;
 import com.mediportal.service.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/patient")
@@ -24,5 +21,12 @@ public class PatientController {
     public ResponseEntity<PatientDto> createPatient(@RequestBody PatientDto patientDto){
         PatientDto dto = patientService.createPatient(patientDto);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }
+
+    //http://localhost:8080/api/patient/byId?id=1
+    @GetMapping("/byId")
+    public ResponseEntity<PatientDto> getPatientById(@RequestParam long id){
+        PatientDto dto = patientService.getById(id);
+        return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 }

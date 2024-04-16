@@ -5,4 +5,6 @@ import com.mediportal.payloads.PatientDto;
 public interface PatientService {
 
     PatientDto createPatient(PatientDto patientDto);
+
+    PatientDto getById(long id);
 }

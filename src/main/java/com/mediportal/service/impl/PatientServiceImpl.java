@@ -1,6 +1,7 @@
 package com.mediportal.service.impl;
 
 import com.mediportal.entity.Patient;
+import com.mediportal.exception.ResourceNotFoundException;
 import com.mediportal.payloads.PatientDto;
 import com.mediportal.repository.PatientRepository;
 import com.mediportal.service.PatientService;
@@ -38,4 +39,32 @@ public class PatientServiceImpl implements PatientService {
 
         return dto;
     }
+
+//    @Override
+//    public PatientDto getById(long id) {
+//        Patient patient = patientRepository.getById(id);
+//        PatientDto dto = new PatientDto();
+//
+//        dto.setId(patient.getId());
+//        dto.setFirstName(patient.getFirstName());
+//        dto.setLastName(patient.getLastName());
+//        dto.setEmail(patient.getEmail());
+//        dto.setGender(patient.getGender());
+//        dto.setMobile(patient.getMobile());
+//        return dto;
+//    }
+@Override
+public PatientDto getById(long id) {
+    Patient patient = patientRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("Patient Not Found with id:-" + id)
+    );
+    PatientDto dto = new PatientDto();
+    dto.setId(patient.getId());
+    dto.setFirstName(patient.getFirstName());
+    dto.setLastName(patient.getLastName());
+    dto.setEmail(patient.getEmail());
+    dto.setGender(patient.getGender());
+    dto.setMobile(patient.getMobile());
+    return dto;
+}
 }
