@@ -7,6 +7,9 @@ import com.mediportal.repository.PatientRepository;
 import com.mediportal.service.PatientService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PatientServiceImpl implements PatientService {
 
@@ -19,22 +22,11 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientDto createPatient(PatientDto patientDto) {
-        Patient patient = new Patient();
-        patient.setFirstName(patientDto.getFirstName());
-        patient.setLastName((patientDto.getLastName()));
-        patient.setEmail(patientDto.getEmail());
-        patient.setGender(patientDto.getGender());
-        patient.setMobile(patientDto.getMobile());
+        Patient patient = mapToEntity(patientDto); //PatientDto convert into Entity
 
         Patient patientE = patientRepository.save(patient);
 
-        PatientDto dto = new PatientDto();
-
-        dto.setFirstName(patientE.getFirstName());
-        dto.setLastName(patientE.getLastName());
-        dto.setEmail(patientE.getEmail());
-        dto.setGender(patientE.getGender());
-        dto.setMobile(patientE.getMobile());
+        PatientDto dto = mapToDto(patientE);   //Entity convert into PatientDtos
 
 
         return dto;
@@ -67,4 +59,35 @@ public PatientDto getById(long id) {
     dto.setMobile(patient.getMobile());
     return dto;
 }
+
+    @Override
+    public List<PatientDto> getAllPatients() {
+        List<Patient> patients = patientRepository.findAll();  //this fetch entity object from db
+        List<PatientDto> dtos = patients.stream().map(patient -> mapToDto(patient)).collect(Collectors.toList());
+        return dtos;
+    }
+
+    PatientDto mapToDto(Patient patientE){
+        PatientDto dto = new PatientDto();                 /*this will convert */
+
+         dto.setId(patientE.getId());                                                   /*Entity to Dtos*/
+        dto.setFirstName(patientE.getFirstName());
+        dto.setLastName(patientE.getLastName());
+        dto.setEmail(patientE.getEmail());
+        dto.setGender(patientE.getGender());
+        dto.setMobile(patientE.getMobile());
+        return dto;
+    }
+
+    Patient mapToEntity(PatientDto patientDto){
+        Patient patient = new Patient();                     /*this will convert */
+       patient.setId(patientDto.getId());
+        patient.setFirstName(patientDto.getFirstName());     /* Dtos to entity*/
+        patient.setLastName((patientDto.getLastName()));
+        patient.setEmail(patientDto.getEmail());
+        patient.setGender(patientDto.getGender());
+        patient.setMobile(patientDto.getMobile());
+        return patient;
+    }
+
 }

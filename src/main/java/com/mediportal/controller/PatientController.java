@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/patient")
 public class PatientController {
@@ -28,5 +30,11 @@ public class PatientController {
     public ResponseEntity<PatientDto> getPatientById(@RequestParam long id){
         PatientDto dto = patientService.getById(id);
         return new ResponseEntity<>(dto,HttpStatus.OK);
+    }
+
+    @GetMapping
+    public List<PatientDto> getAllPatient(){
+        List<PatientDto> dto = patientService.getAllPatients();
+        return dto;
     }
 }
