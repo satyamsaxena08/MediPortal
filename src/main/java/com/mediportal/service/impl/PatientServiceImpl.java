@@ -5,6 +5,9 @@ import com.mediportal.exception.ResourceNotFoundException;
 import com.mediportal.payloads.PatientDto;
 import com.mediportal.repository.PatientRepository;
 import com.mediportal.service.PatientService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,8 +64,10 @@ public PatientDto getById(long id) {
 }
 
     @Override
-    public List<PatientDto> getAllPatients() {
-        List<Patient> patients = patientRepository.findAll();  //this fetch entity object from db
+    public List<PatientDto> getAllPatients(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Patient> pagePatient = patientRepository.findAll(pageable);//this fetch entity object from db
+        List<Patient> patients = pagePatient.getContent();
         List<PatientDto> dtos = patients.stream().map(patient -> mapToDto(patient)).collect(Collectors.toList());
         return dtos;
     }

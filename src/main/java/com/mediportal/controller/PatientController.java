@@ -32,9 +32,13 @@ public class PatientController {
         return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 
+    //http://localhost:8080/api/patient?pageNo=0&pageSize=5
     @GetMapping
-    public List<PatientDto> getAllPatient(){
-        List<PatientDto> dto = patientService.getAllPatients();
+    public List<PatientDto> getAllPatient(
+            @RequestParam(name = "pageNo", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "5") int pageSize
+    ){
+        List<PatientDto> dto = patientService.getAllPatients(pageNo,pageSize);
         return dto;
     }
 }
