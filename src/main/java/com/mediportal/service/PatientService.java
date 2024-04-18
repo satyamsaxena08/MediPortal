@@ -11,5 +11,5 @@ public interface PatientService {
     PatientDto getById(long id);
 
 
-    List<PatientDto> getAllPatients(int pageNo, int pageSize);
+    List<PatientDto> getAllPatients(int pageNo, int pageSize, String sortBy, String sortDir);
 }

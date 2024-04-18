@@ -36,9 +36,11 @@ public class PatientController {
     @GetMapping
     public List<PatientDto> getAllPatient(
             @RequestParam(name = "pageNo", required = false, defaultValue = "0") int pageNo,
-            @RequestParam(name = "pageSize", required = false, defaultValue = "5") int pageSize
+            @RequestParam(name = "pageSize", required = false, defaultValue = "5") int pageSize,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "id") String sortBy,
+            @RequestParam(value = "sortDir", required = false,defaultValue = "id") String sortDir
     ){
-        List<PatientDto> dto = patientService.getAllPatients(pageNo,pageSize);
+        List<PatientDto> dto = patientService.getAllPatients(pageNo,pageSize, sortBy,sortDir);
         return dto;
     }
 }

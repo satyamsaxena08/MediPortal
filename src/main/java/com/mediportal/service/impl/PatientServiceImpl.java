@@ -8,6 +8,7 @@ import com.mediportal.service.PatientService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -64,8 +65,11 @@ public PatientDto getById(long id) {
 }
 
     @Override
-    public List<PatientDto> getAllPatients(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+    public List<PatientDto> getAllPatients(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+//        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Patient> pagePatient = patientRepository.findAll(pageable);//this fetch entity object from db
         List<Patient> patients = pagePatient.getContent();
         List<PatientDto> dtos = patients.stream().map(patient -> mapToDto(patient)).collect(Collectors.toList());
