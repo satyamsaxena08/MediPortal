@@ -5,6 +5,7 @@ import com.mediportal.exception.ResourceNotFoundException;
 import com.mediportal.payloads.PatientDto;
 import com.mediportal.repository.PatientRepository;
 import com.mediportal.service.PatientService;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +19,11 @@ import java.util.stream.Collectors;
 public class PatientServiceImpl implements PatientService {
 
     private PatientRepository patientRepository;
+    private ModelMapper modelMapper;
 
-    public PatientServiceImpl(PatientRepository patientRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper) {
         this.patientRepository = patientRepository;
+        this.modelMapper = modelMapper;
     }
 
 
@@ -36,7 +39,7 @@ public class PatientServiceImpl implements PatientService {
         return dto;
     }
 
-//    @Override
+    //    @Override
 //    public PatientDto getById(long id) {
 //        Patient patient = patientRepository.getById(id);
 //        PatientDto dto = new PatientDto();
@@ -49,20 +52,21 @@ public class PatientServiceImpl implements PatientService {
 //        dto.setMobile(patient.getMobile());
 //        return dto;
 //    }
-@Override
-public PatientDto getById(long id) {
-    Patient patient = patientRepository.findById(id).orElseThrow(
-            () -> new ResourceNotFoundException("Patient Not Found with id:-" + id)
-    );
-    PatientDto dto = new PatientDto();
-    dto.setId(patient.getId());
-    dto.setFirstName(patient.getFirstName());
-    dto.setLastName(patient.getLastName());
-    dto.setEmail(patient.getEmail());
-    dto.setGender(patient.getGender());
-    dto.setMobile(patient.getMobile());
-    return dto;
-}
+    @Override
+    public PatientDto getById(long id) {
+        Patient patient = patientRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Patient Not Found with id:-" + id)
+        );
+//        PatientDto dto = new PatientDto();
+//        dto.setId(patient.getId());
+//        dto.setFirstName(patient.getFirstName());
+//        dto.setLastName(patient.getLastName());
+//        dto.setEmail(patient.getEmail());
+//        dto.setGender(patient.getGender());
+//        dto.setMobile(patient.getMobile());
+        PatientDto dto = modelMapper.map(patient, PatientDto.class);
+        return dto;
+    }
 
     @Override
     public List<PatientDto> getAllPatients(int pageNo, int pageSize, String sortBy, String sortDir) {
@@ -76,26 +80,31 @@ public PatientDto getById(long id) {
         return dtos;
     }
 
-    PatientDto mapToDto(Patient patientE){
-        PatientDto dto = new PatientDto();                 /*this will convert */
-
-         dto.setId(patientE.getId());                                                   /*Entity to Dtos*/
-        dto.setFirstName(patientE.getFirstName());
-        dto.setLastName(patientE.getLastName());
-        dto.setEmail(patientE.getEmail());
-        dto.setGender(patientE.getGender());
-        dto.setMobile(patientE.getMobile());
+    PatientDto mapToDto(Patient patientE) {
+//        PatientDto dto = new PatientDto();                 /*this will convert */
+//
+//        dto.setId(patientE.getId());                                                   /*Entity to Dtos*/
+//        dto.setFirstName(patientE.getFirstName());
+//        dto.setLastName(patientE.getLastName());
+//        dto.setEmail(patientE.getEmail());
+//        dto.setGender(patientE.getGender());
+//        dto.setMobile(patientE.getMobile());
+        PatientDto dto = modelMapper.map(patientE, PatientDto.class);
         return dto;
+
     }
 
-    Patient mapToEntity(PatientDto patientDto){
-        Patient patient = new Patient();                     /*this will convert */
-       patient.setId(patientDto.getId());
-        patient.setFirstName(patientDto.getFirstName());     /* Dtos to entity*/
-        patient.setLastName((patientDto.getLastName()));
-        patient.setEmail(patientDto.getEmail());
-        patient.setGender(patientDto.getGender());
-        patient.setMobile(patientDto.getMobile());
+    Patient mapToEntity(PatientDto patientDto) {
+//        Patient patient = new Patient();                     /*this will convert */
+//        patient.setId(patientDto.getId());
+//        patient.setFirstName(patientDto.getFirstName());     /* Dtos to entity*/
+//        patient.setLastName((patientDto.getLastName()));
+//        patient.setEmail(patientDto.getEmail());
+//        patient.setGender(patientDto.getGender());
+//        patient.setMobile(patientDto.getMobile());
+
+        Patient patient = modelMapper.map(patientDto, Patient.class);
+
         return patient;
     }
 
