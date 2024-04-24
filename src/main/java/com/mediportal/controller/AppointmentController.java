@@ -23,4 +23,11 @@ public class AppointmentController {
         AppointmentDto dto = appointmentService.createAppointment(appointmentDto, patientId);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
+
+    //http://localhost:8081/api/appointment/2
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAppointment(@PathVariable long id){
+        appointmentService.deleteAppointmet(id);
+        return new ResponseEntity<>("Appointment is deleted!! " + id ,HttpStatus.OK);
+    }
 }

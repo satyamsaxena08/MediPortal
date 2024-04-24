@@ -51,4 +51,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return dto;
     }
+
+    @Override
+    public void deleteAppointmet(long id) {
+        appointmentRepository.deleteById(id);
+    }
 }

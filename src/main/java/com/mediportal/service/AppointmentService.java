@@ -6,4 +6,6 @@ public interface AppointmentService {
 
 
     AppointmentDto createAppointment(AppointmentDto appointmentDto, long patientId);
+
+    void deleteAppointmet(long id);
 }
