@@ -4,6 +4,7 @@ import com.mediportal.payloads.PatientDto;
 import com.mediportal.service.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class PatientController {
     }
 
     //http://localhost:8080/api/patient
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<PatientDto> createPatient(@RequestBody PatientDto patientDto){
         PatientDto dto = patientService.createPatient(patientDto);

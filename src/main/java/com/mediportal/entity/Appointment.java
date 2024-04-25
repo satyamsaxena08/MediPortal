@@ -1,7 +1,7 @@
 package com.mediportal.entity;
 
 import com.mediportal.entity.Patient;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

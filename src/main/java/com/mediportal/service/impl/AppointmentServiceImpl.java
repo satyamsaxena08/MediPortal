@@ -36,10 +36,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 //
 //        appointment.setDate(appointmentDto.getDate());
 //        appointment.setReason(appointmentDto.getReason());
-//        appointment.setPatient(patient);
+ //       appointment.setPatient(patient);
 
         Appointment appointment = modelMapper.map(appointmentDto, Appointment.class);
-
+        appointment.setPatient(patient);
         Appointment app = appointmentRepository.save(appointment);
 
 //        AppointmentDto dto = new AppointmentDto();
@@ -55,5 +55,35 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void deleteAppointmet(long id) {
         appointmentRepository.deleteById(id);
+    }
+
+    @Override
+    public AppointmentDto updateAppointment(long id, AppointmentDto appointmentDto, long patientId) {
+        Patient patient = patientRepository.findById(patientId).orElseThrow(
+                () -> new ResourceNotFoundException("Patient NOt Found With Id:-" + id)
+        );
+
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Appointment is not Found with id:-" + id)
+        );
+        Appointment appointment1 = mapToEntity(appointmentDto);
+        appointment1.setId(appointment.getId());
+        appointment1.setPatient(patient);
+
+        Appointment save = appointmentRepository.save(appointment1);
+        AppointmentDto appointmentDto1 = mapToDto(save);
+
+        return appointmentDto1;
+
+    }
+
+    Appointment mapToEntity(AppointmentDto appointmentDto){
+        Appointment appointment = modelMapper.map(appointmentDto, Appointment.class);
+        return appointment;
+    }
+
+    AppointmentDto mapToDto(Appointment appointment){
+        AppointmentDto dto = modelMapper.map(appointment, AppointmentDto.class);
+        return dto;
     }
 }

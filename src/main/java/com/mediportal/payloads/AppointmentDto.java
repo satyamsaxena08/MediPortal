@@ -1,7 +1,7 @@
 package com.mediportal.payloads;
 
 import com.mediportal.entity.Patient;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Data;
 
 @Data
