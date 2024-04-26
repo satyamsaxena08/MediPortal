@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
               .antMatchers(HttpMethod.POST, "/api/post").hasRole("ADMIN") //this work as @PreAuthorize("hasRole('ADMIN')")
-                                                                                   //in controller layer
+                .antMatchers(HttpMethod.POST, "/api/auth/signUp").permitAll()                                                               //in controller layer
                 .anyRequest()
                 .authenticated()
                 .and()
