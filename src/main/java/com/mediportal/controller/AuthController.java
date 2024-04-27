@@ -1,7 +1,9 @@
 package com.mediportal.controller;
 
+import com.mediportal.entity.Role;
 import com.mediportal.entity.User;
 import com.mediportal.payloads.SignUpDto;
+import com.mediportal.repository.RoleRepository;
 import com.mediportal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -21,6 +26,9 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @PostMapping("/signUp")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
@@ -38,6 +46,13 @@ public class AuthController {
         user.setUsername(signUpDto.getUsername());
         user.setEmail(signUpDto.getEmail());
         user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
+
+        Role roles = roleRepository.findByName(signUpDto.getRoleType()).get();
+
+        Set<Role> convertRoleToSet = new HashSet<>();
+        convertRoleToSet.add(roles);
+
+        user.setRoles(convertRoleToSet);
 
         userRepository.save(user);
 
