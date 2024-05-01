@@ -2,12 +2,17 @@ package com.mediportal.controller;
 
 import com.mediportal.entity.Role;
 import com.mediportal.entity.User;
+import com.mediportal.payloads.LoginDto;
 import com.mediportal.payloads.SignUpDto;
 import com.mediportal.repository.RoleRepository;
 import com.mediportal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +26,8 @@ import java.util.Set;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    @Autowired
+    public AuthenticationManager authenticationManager;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -58,5 +65,22 @@ public class AuthController {
 
         return new ResponseEntity<>("user registration successful" , HttpStatus.OK);
 
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<String> signIn(@RequestBody LoginDto loginDto){
+
+//        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+//                new UsernamePasswordAuthenticationToken(loginDto.getPassword(),loginDto.getUsername());
+
+//        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
+//        SecurityContextHolder.getContext().setAuthentication(authenticate);
+
+        authenticationManager.authenticate(
+                new  UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword())
+        );
+
+        return new ResponseEntity<>("User signIn Successful" , HttpStatus.OK);
     }
 }
